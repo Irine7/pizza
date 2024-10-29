@@ -4,6 +4,8 @@ export { Container } from './container';
 export { Header } from './header';
 export { Filters } from './filters';
 export { FilterCheckBox } from './filter-checkbox';
+export { ProductCard } from './product-card';
+export { ProductsGroupList } from './products-group-list';
 export { RangeSlider } from './range-slider';
 export { SortPopup } from './sort-popup';
 export { Title } from './title';
