@@ -1,7 +1,27 @@
-import Image from "next/image";
+import { Container, Filters, Title, TopBar } from '@/components/shared';
 
 export default function Home() {
-  return (
-    <h1>Home</h1>
-  );
+	return (
+		<>
+			<Container className="mt-10">
+				<Title text="Все пиццы" size="lg" className="font-extrabold" />
+			</Container>
+			<TopBar />
+
+			<Container className="mt-10 pb-14">
+				<div className="flex gap-[60px]">
+					{/* Компонент для фильтрации пицц */}
+					<div className="w-[250px]">
+						<Filters />
+					</div>
+					{/* Компонент для отображения пицц */}
+					<div className="flex-1">
+						<div className="flex flex-col gap-16">
+							Список пицц
+						</div>
+					</div>
+				</div>
+			</Container>
+		</>
+	);
 }
