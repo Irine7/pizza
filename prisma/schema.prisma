@@ -19,6 +19,32 @@ enum UserRole {
 	User
 }
 
+model Cart {
+	id    Int @id @default(autoincrement())
+	userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+	totalAmount Int @default(0)
+	token String // Токен для неавторизованных пользователей
+	items CartItem[]
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+	id    Int @id @default(autoincrement())
+	productItem ProductItem @relation(fields: [productItemID], references: [id])
+	productItemID Int
+	cart Cart @relation(fields: [cartId], references: [id])
+	cartId Int
+	quantity Int 
+	// Дополнительные ингредиенты:
+	ingredients Ingredient[]	
+
+	createdAt DateTime @default(now())
+	updatedAt DateTime @updatedAt
+}
+
 model Category {
 	id    Int @id @default(autoincrement())
 	name  String @unique
@@ -50,7 +76,7 @@ model Product {
 	// Связь с Ingredient по ingredientId many to many (внешний ключ): 
 	ingredients Ingredient[]
 	// Связь с ProductItem по productId (внешний ключ): 
-	items ProductItem[]
+	items ProductItem[] // Вариации товара
 
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt	
@@ -64,32 +90,6 @@ model ProductItem {
 	product Product @relation(fields: [productId], references: [id])
 	productId Int
 	cartItems CartItem[]
-
-	createdAt DateTime @default(now())
-	updatedAt DateTime @updatedAt
-}
-
-model Cart {
-	id    Int @id @default(autoincrement())
-	user User? @relation(fields: [userID], references: [id])	
-	userID Int? @unique
-	totalAmount Int @default(0)
-	token String // Токен для неавторизованных пользователей
-	items CartItem[]
-
-	createdAt DateTime @default(now())
-	updatedAt DateTime @updatedAt
-}
-
-model CartItem {
-	id    Int @id @default(autoincrement())
-	productItem ProductItem @relation(fields: [productItemID], references: [id])
-	productItemID Int
-	cart Cart @relation(fields: [cartID], references: [id])
-	cartID Int
-	quantity Int 
-	// Дополнительные ингредиенты:
-	ingredients Ingredient[]	
 
 	createdAt DateTime @default(now())
 	updatedAt DateTime @updatedAt
@@ -114,7 +114,6 @@ model Order {
 	updatedAt DateTime @updatedAt
 }
 
-
 model VerificationCode {
 	id    Int @id @default(autoincrement())
 	user User @relation(fields: [userId], references: [id])
@@ -131,6 +130,7 @@ model User {
 	email  String @unique
 	password String
 	role UserRole @default(User)
+	verified DateTime
 	cart Cart?
 	orders Order[]
 	verificationCode VerificationCode?
