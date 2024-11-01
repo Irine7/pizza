@@ -5,7 +5,7 @@ import {
 	FilterCheckBox,
 	FilterCheckboxProps,
 } from '@/components/shared/filter-checkbox';
-import { Input } from '@/components/ui';
+import { Input, Skeleton } from '@/components/ui';
 
 // type Item = FilterCheckboxProps;
 
@@ -18,6 +18,7 @@ interface Props {
 	className?: string;
 	onChange?: (values: string[]) => void; // Обработчик изменения значений чекбоксов
 	defaultValue?: string[]; // Значения выбранных чекбоксов при перезагрузке страницы
+	loading?: boolean;
 }
 
 export const CheckboxFiltersGroup = ({
@@ -29,6 +30,7 @@ export const CheckboxFiltersGroup = ({
 	className,
 	onChange,
 	defaultValue,
+	loading,
 }: Props) => {
 	const [showAll, setShowAll] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
@@ -37,15 +39,27 @@ export const CheckboxFiltersGroup = ({
 	const listOfItems = showAll
 		? items.filter((item) => item.text.toLowerCase().includes(searchValue))
 		: defaultItems.slice(0, limit);
-		
+
 	// Функция обработчик изменения значений чекбоксов:
 	const onChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchValue(e.target.value);
 	};
 
+	if (loading) {
+		return (
+			<div className={className}>
+				<p className="font-bold mb-3">{title}</p>
+				{...Array(limit)
+					.fill(0)
+					.map((_, index) => <Skeleton className="h-6 mb-5 rounded-[8px]" />)}
+				<Skeleton className="w-28 h-6 mb-5 rounded-[8px]" />
+			</div>
+		);
+	}
+
 	return (
 		<div className={className}>
-			<p className="font-bold mb-3">{title}</p>
+			<p className="font-bold mb-4">{title}</p>
 
 			{/* Поиск доступен только при раскрытом списке */}
 			{showAll && (
