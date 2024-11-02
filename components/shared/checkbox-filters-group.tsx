@@ -12,14 +12,14 @@ import { Input, Skeleton } from '@/components/ui';
 interface Props {
 	title: string;
 	items: FilterCheckboxProps[]; // Весь список чекбоксов
-	defaultItems: FilterCheckboxProps[]; // Показывает ограниченное количество чекбоксов при нераскрытом списке
+	defaultItems?: FilterCheckboxProps[]; // Показывает ограниченное количество чекбоксов при нераскрытом списке
 	limit?: number; // Ограничение количества чекбоксов при раскрытом списке
 	searchInputPlaceholder?: string;
 	className?: string;
 	onClickCheckbox?: (id: string) => void; // Обработчик изменения значений чекбоксов
 	defaultValue?: string[]; // Значения выбранных чекбоксов при перезагрузке страницы
 	loading?: boolean;
-	selectedIds?: Set<string>;
+	selectedValues?: Set<string>;
 	name?: string;
 }
 
@@ -33,7 +33,7 @@ export const CheckboxFiltersGroup = ({
 	onClickCheckbox,
 	defaultValue,
 	loading,
-	selectedIds,
+	selectedValues,
 	name,
 }: Props) => {
 	const [showAll, setShowAll] = useState(false);
@@ -42,7 +42,7 @@ export const CheckboxFiltersGroup = ({
 	// Показывает ограниченное количество чекбоксов при нераскрытом списке:
 	const listOfItems = showAll
 		? items.filter((item) => item.text.toLowerCase().includes(searchValue))
-		: defaultItems.slice(0, limit);
+		: (defaultItems || items).slice(0, limit);
 
 	// Функция обработчик изменения значений чекбоксов:
 	const onChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +82,7 @@ export const CheckboxFiltersGroup = ({
 						key={index}
 						text={item.text}
 						value={item.value}
-						checked={selectedIds?.has(item.value)}
+						checked={selectedValues?.has(item.value)}
 						endAdornment={item.endAdornment}
 						onCheckedChange={() => onClickCheckbox?.(item.value)}
 						name={name}
