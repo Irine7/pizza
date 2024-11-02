@@ -16,9 +16,11 @@ interface Props {
 	limit?: number; // Ограничение количества чекбоксов при раскрытом списке
 	searchInputPlaceholder?: string;
 	className?: string;
-	onChange?: (values: string[]) => void; // Обработчик изменения значений чекбоксов
+	onClickCheckbox?: (id: string) => void; // Обработчик изменения значений чекбоксов
 	defaultValue?: string[]; // Значения выбранных чекбоксов при перезагрузке страницы
 	loading?: boolean;
+	selectedIds?: Set<string>;
+	name?: string;
 }
 
 export const CheckboxFiltersGroup = ({
@@ -28,9 +30,11 @@ export const CheckboxFiltersGroup = ({
 	limit = 5,
 	searchInputPlaceholder = 'Поиск...',
 	className,
-	onChange,
+	onClickCheckbox,
 	defaultValue,
 	loading,
+	selectedIds,
+	name,
 }: Props) => {
 	const [showAll, setShowAll] = useState(false);
 	const [searchValue, setSearchValue] = useState('');
@@ -78,9 +82,10 @@ export const CheckboxFiltersGroup = ({
 						key={index}
 						text={item.text}
 						value={item.value}
-						checked={false}
+						checked={selectedIds?.has(item.value)}
 						endAdornment={item.endAdornment}
-						onCheckedChange={(ids) => console.log(ids)}
+						onCheckedChange={() => onClickCheckbox?.(item.value)}
+						name={name}
 					/>
 				))}
 			</div>

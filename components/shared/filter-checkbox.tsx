@@ -6,6 +6,7 @@ export interface FilterCheckboxProps {
 	checked?: boolean;
 	endAdornment?: React.ReactNode;
 	onCheckedChange?: (checked: boolean) => void;
+	name?: string;
 }
 
 export const FilterCheckBox = ({
@@ -14,6 +15,7 @@ export const FilterCheckBox = ({
 	checked,
 	endAdornment,
 	onCheckedChange,
+	name,
 }: FilterCheckboxProps) => {
 	return (
 		<div className="flex items-center space-x-2">
@@ -22,9 +24,9 @@ export const FilterCheckBox = ({
 				checked={checked}
 				onCheckedChange={onCheckedChange}
 				className="rounded-[8px] w-6 h-6"
-				id={`checkbox-${String(value)}`} // Возможность выбрать чекбокс при клике на текст рядом с ним
+				id={`checkbox-${String(name)} ${String(value)}`} // Возможность выбрать чекбокс при клике на текст рядом с ним
 			/>
-			<label htmlFor={`checkbox-${String(value)}`}
+			<label htmlFor={`checkbox-${String(name)} ${String(value)}`}
 			className='flex-1 cursor-pointer leading-none'>
 				{text}
 			</label>
